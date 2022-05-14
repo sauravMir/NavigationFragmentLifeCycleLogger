@@ -130,6 +130,8 @@ class FirstFragment : Fragment() {
         Log.e("1st", str)
     }
 
+    // this dialog will not make the fragment pause
+    // the pausing from dialog will only happen when the dialog is from the system i,e permission dialog
     private fun buildAlert() {
         AlertDialog.Builder(context)
             .setTitle("Delete entry")
