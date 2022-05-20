@@ -11,6 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.myapplication.databinding.FragmentFirstBinding
 
@@ -25,10 +29,36 @@ class FirstFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    lateinit var viewModel: Frgment1ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log("onCreate")
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        log("view Created")
+        viewModel = ViewModelProvider(this).get(Frgment1ViewModel::class.java)
+        binding.buttonFirst.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+
+        binding.buttonSec.setOnClickListener {
+            buildAlert()
+        }
+
+        for (i in 1..10){
+            viewModel.data.observe(viewLifecycleOwner, Observer {
+                log("the livedata: $it")
+            })
+
+            // as the log is different the live data will be called 20 times
+            viewModel.data.observe(viewLifecycleOwner, Observer {
+                log("the livedata2: $it")
+            })
+        }
+
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -38,6 +68,7 @@ class FirstFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+        log("onDetach")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -85,27 +116,26 @@ class FirstFragment : Fragment() {
         log("onStart")
     }
 
+
     override fun onStop() {
         super.onStop()
         log("stop")
     }
 
-
     override fun onPause() {
         super.onPause()
         log("pause")
     }
-
     override fun onDestroy() {
         super.onDestroy()
         log("destroy")
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         log("destroyView")
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,17 +143,6 @@ class FirstFragment : Fragment() {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
 
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        log("view Created")
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
-
-        binding.buttonSec.setOnClickListener {
-            buildAlert()
-        }
     }
 
     fun log(str: String) {
@@ -139,7 +158,7 @@ class FirstFragment : Fragment() {
             // The dialog is automatically dismissed when a dialog button is clicked.
             .setPositiveButton(android.R.string.yes,
                 DialogInterface.OnClickListener { dialog, which ->
-                    // Continue with delete operation
+                    viewModel.setData("chill")
                 }) // A null listener allows the button to dismiss the dialog and take no further action.
             .setNegativeButton(android.R.string.no, null)
             .setIcon(android.R.drawable.ic_dialog_alert)
