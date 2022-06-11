@@ -41,7 +41,7 @@ class FirstFragment : Fragment() {
         log("view Created")
         viewModel = ViewModelProvider(this).get(Frgment1ViewModel::class.java)
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            findNavController().popBackStack(R.id.action_FirstFragment_to_SecondFragment, false)
         }
 
         binding.buttonSec.setOnClickListener {
