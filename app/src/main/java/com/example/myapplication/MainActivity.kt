@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
         log("onCreate")
+        log("onCreate2")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
