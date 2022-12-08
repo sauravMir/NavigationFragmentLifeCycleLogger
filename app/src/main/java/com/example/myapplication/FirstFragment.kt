@@ -48,6 +48,21 @@ class FirstFragment : Fragment() {
             buildAlert()
         }
 
+        val a = 1
+        when(a) {
+            1 -> {
+                Log.e("p", "1")
+            }
+
+            2 -> {
+                Log.e("p", "2")
+            }
+
+            3 -> {
+                Log.e("p", "3")
+            }
+        }
+
         for (i in 1..10){
             viewModel.data.observe(viewLifecycleOwner, Observer {
                 log("the livedata: $it")
